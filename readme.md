@@ -21,6 +21,11 @@ npm i
 私钥
 ```
 
+## 修改数据
+
+1. 13行 `const toAddress = "接受代币的地址"` 把 `接受代币的地址` 修改成你的 大号地址 这样所有代币会自动领取到这个地址
+2. 32行 `const provider = new ethers.providers.JsonRpcProvider("https://arb1.arbitrum.io/rpc");`  把 `https://arb1.arbitrum.io/rpc` 修改成 更好的rpc 防止频率限制等问题
+
 ## 运行
 
 然后，运行以下命令来启动程序：
