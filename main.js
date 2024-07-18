@@ -24,7 +24,7 @@ function ensureDirectoryExistence(filePath) {
 [successPath, claimDataPath, failPath].forEach(filePath => {
     ensureDirectoryExistence(filePath);
     fs.writeFileSync(filePath, '', { flag: 'w' }); // 'w' flag will create an empty file or truncate an existing file
-    logger.debug(`Created: ${filePath}`)
+    // logger.debug(`Created: ${filePath}`)
 });
 
 const successWallets = fs
@@ -156,6 +156,120 @@ async function getClaimData(client, toAddress,authorization) {
     return response.data;
 }
 
+async function check(client,authorization) {
+    const url ="https://api.uxlink.io/risk/recaptcha/check"
+    const data = {"scene":3}
+    const headers = {
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+        Origin: 'https://reward.uxlink.io',
+        Pragma: 'no-cache',
+        Referer: 'https://reward.uxlink.io/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+        accept: 'application/json',
+        authorization: authorization,
+        'content-type': 'application/json',
+        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"macOS"',
+        'x-language': 'en-US',
+        'x-platform': 'reward',
+        'x-version': '1.0.0',
+        'x-walletplatform': 'Chrome',
+        Accept: '*/*',
+        'Accept-Encoding': 'gzip, deflate, br'
+    }
+
+    const response = await client.post(
+        url,
+        data,
+        {
+            headers: headers
+        }
+    );
+    return response.data;
+}
+
+async function verify(client,authorization) {
+    const url ="https://api.uxlink.io/nft/uxlink/review/verify"
+    const data = {}
+    const headers = {
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+        Origin: 'https://reward.uxlink.io',
+        Pragma: 'no-cache',
+        Referer: 'https://reward.uxlink.io/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+        accept: 'application/json',
+        authorization: authorization,
+        'content-type': 'application/json',
+        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"macOS"',
+        'x-language': 'en-US',
+        'x-platform': 'reward',
+        'x-version': '1.0.0',
+        'x-walletplatform': 'Chrome',
+        Accept: '*/*',
+        'Accept-Encoding': 'gzip, deflate, br'
+    }
+
+    const response = await client.post(
+        url,
+        data,
+        {
+            headers: headers
+        }
+    );
+    return response.data;
+}
+
+async function list(client,authorization) {
+    const url ="https://api.uxlink.io/nft/uxlink/review/list"
+    const data = {}
+    const headers = {
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+        Origin: 'https://reward.uxlink.io',
+        Pragma: 'no-cache',
+        Referer: 'https://reward.uxlink.io/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+        accept: 'application/json',
+        authorization: authorization,
+        'content-type': 'application/json',
+        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"macOS"',
+        'x-language': 'en-US',
+        'x-platform': 'reward',
+        'x-version': '1.0.0',
+        'x-walletplatform': 'Chrome',
+        Accept: '*/*',
+        'Accept-Encoding': 'gzip, deflate, br'
+    }
+
+    const response = await client.post(
+        url,
+        data,
+        {
+            headers: headers
+        }
+    );
+    return response.data;
+}
+
 
 async function claim(privateKey) {
     const jar = new CookieJar();
@@ -194,6 +308,14 @@ async function claim(privateKey) {
     let claimData;
     for (let i = 0; i < 15; i++) {
         try {
+            let res = await list(client,accessToken)
+            // logger.debug(`${myAddress} ${JSON.stringify(res)}`)
+            if(res?.data?.canVerify){
+                res = await verify(client,accessToken)
+                logger.debug(`${myAddress} ${JSON.stringify(res)}`)
+            }
+            // const checkResponse = await check(client,accessToken)
+            // logger.debug(`${myAddress} ${JSON.stringify(checkResponse)}`)
             claimData = await getClaimData(client, toAddress,accessToken)
             logger.debug(`${myAddress} ${JSON.stringify(claimData)}`)
             if (claimData?.data?.signature) {

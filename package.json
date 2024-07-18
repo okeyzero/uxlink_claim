@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "@youpaichris/logger": "^5.0.0",
+    "axios": "^1.7.2",
     "axios-cookiejar-support": "^5.0.2",
     "ethers": "^5.7.2",
     "p-limit": "^6.1.0",
