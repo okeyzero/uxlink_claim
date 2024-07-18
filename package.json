@@ -1,0 +1,20 @@
+{
+  "name": "uxlink_claim",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@youpaichris/logger": "^5.0.0",
+    "axios-cookiejar-support": "^5.0.2",
+    "ethers": "^5.7.2",
+    "p-limit": "^6.1.0",
+    "tough-cookie": "^4.1.4"
+  },
+  "type": "module"
+}
